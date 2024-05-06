@@ -1,3 +1,31 @@
+function FindProxyForURL (url, host) {
+    function shouldNotProxy(url, host, userWhitelist) {
+      let lanIps = /(^(127|10)\.\d{1,3}\.\d{1,3}\.\d{1,3}$)|(^192\.168\.\d{1,3}\.\d{1,3}$)|(^172\.1[6-9]\.\d{1,3}\.\d{1,3}$)|(^172\.2[0-9]\.\d{1,3}.\d{1,3}$)|(^172\.3[0-1]\.\d{1,3}\.\d{1,3}$)/
+
+      let whitelist = [
+        '*://api.windscribe.com/*',
+        '*://assets.windscribe.com/*',
+        '*://*.staticnetcontent.com/*',
+        '*://api.totallyacdn.com/*',
+        '*://assets.totallyacdn.com/*',
+        
+        'https://windscribe.com/installed/*',
+      ].concat(userWhitelist)
+
+      return [
+        isPlainHostName(host),
+        // if it is NOT an allowed protocol then go direct
+        // TODO: how to test local protocols?
+        ['http', 'ftp', 'ws'].every(protocol => !url.startsWith(protocol)),
+        lanIps.test(host),
+        whitelist.some(pattern => shExpMatch(url, pattern)),
+      ].some(_ => _)
+    }
+    let whitelist = []
+    if (shouldNotProxy(url, host, whitelist)) {
+      return 'DIRECT'
+    }
+    if (['*://hulu.com/*','*.hulu.com/*','*://spotify.com/*','*.spotify.com/*','*://pandora.com/*','*.pandora.com/*','*://crackle.com/*','*.crackle.com/*','*://amazon.com/vod/*','*.amazon.com/vod/*','*://amazon.com/dp/*','*.amazon.com/dp/*','*://crunchyroll.com/*','*.crunchyroll.com/*','*://nfl.com/*','*.nfl.com/*','*://vevo.com/*','*.vevo.com/*','*://cnn.com/go/*','*.cnn.com/go/*','*://abc.com/*','*.abc.com/*','*://go.com/*','*.go.com/*','*://hbogo.com/*','*.hbogo.com/*','*://hbonow.com/*','*.hbonow.com/*','*://cbs.com/*','*.cbs.com/*','*://nbc.com/*','*.nbc.com/*','*://nbcsports.com/*','*.nbcsports.com/*','*://fox.com/*','*.fox.com/*','*://mtv.com/*','*.mtv.com/*','*://rdio.com/*','*.rdio.com/*','*://cartoonnetwork.com/*','*.cartoonnetwork.com/*','*://foodnetwork.com/*','*.foodnetwork.com/*','*://pbs.org/*','*.pbs.org/*','*://pbskids.org/*','*.pbskids.org/*','*://stv.tv/*','*.stv.tv/*','*://rhapsody.com/*','*.rhapsody.com/*','*://songza.com/*','*.songza.com/*','*://usanetwork.com/*','*.usanetwork.com/*','*://mylifetime.com/*','*.mylifetime.com/*','*://cinemanow.com/*','*.cinemanow.com/*','*://bravotv.com/*','*.bravotv.com/*','*://cwtv.com/*','*.cwtv.com/*','*://fxnetworks.com/*','*.fxnetworks.com/*','*://hgtv.com/*','*.hgtv.com/*','*://tvland.com/*','*.tvland.com/*','*://blockbuster.com/*','*.blockbuster.com/*','*://blockbusternow.com/*','*.blockbusternow.com/*','*://vudu.com/*','*.vudu.com/*','*://sho.com/*','*.sho.com/*','*://slacker.com/*','*.slacker.com/*','*://comedycentral.com/*','*.comedycentral.com/*','*://syfy.com/*','*.syfy.com/*','*://tntdrama.com/*','*.tntdrama.com/*','*://iheart.com/*','*.iheart.com/*','*://thewb.com/*','*.thewb.com/*','*://nowtv.com/*','*.nowtv.com/*','*://nhl.com/*','*.nhl.com/*','*://oxygen.com/*','*.oxygen.com/*','*://zuus.com/*','*.zuus.com/*','*://wwe.com/*','*.wwe.com/*','*://nextissue.com/*','*.nextissue.com/*','*://dramafever.com/*','*.dramafever.com/*','*://screen.yahoo.com/*','*.screen.yahoo.com/*','*://beatsmusic.com/*','*.beatsmusic.com/*','*://ncaa.com/*','*.ncaa.com/*','*://foxsoccer2go.com/*','*.foxsoccer2go.com/*','*://vh1.com/*','*.vh1.com/*','*://disneyjunior.com/*','*.disneyjunior.com/*','*://telemundo.com/*','*.telemundo.com/*','*://viki.com/*','*.viki.com/*','*://fyi.com/*','*.fyi.com/*','*://playlist.com/*','*.playlist.com/*','*://aetv.com/*','*.aetv.com/*','*://oprah.com/*','*.oprah.com/*','*://comcast.com/*','*.comcast.com/*','*://maxgo.com/*','*.maxgo.com/*','*://utopiatv.com/*','*.utopiatv.com/*','*://ondemandkorea.com/*','*.ondemandkorea.com/*','*://smithsonianchannel.com/*','*.smithsonianchannel.com/*','*://history.com/*','*.history.com/*','*://tbs.com/*','*.tbs.com/*','*://tcm.com/*','*.tcm.com/*','*://mundofox.com/*','*.mundofox.com/*','*://funimation.com/*','*.funimation.com/*','*://klowdtv.com/*','*.klowdtv.com/*','*://nick.com/*','*.nick.com/*','*://teennick.com/*','*.teennick.com/*','*://sproutonline.com/*','*.sproutonline.com/*','*://spike.com/*','*.spike.com/*','*://mgo.com/*','*.mgo.com/*','*://directv.com/*','*.directv.com/*','*://golfchannel.com/*','*.golfchannel.com/*','*://sling.com/*','*.sling.com/*','*://foxsports.com/*','*.foxsports.com/*','*://cmt.com/*','*.cmt.com/*','*://logotv.com/*','*.logotv.com/*','*://pgatourlive.com/*','*.pgatourlive.com/*','*://shoutfactorytv.com/*','*.shoutfactorytv.com/*','*://trutv.com/*','*.trutv.com/*','*://shudder.com/*','*.shudder.com/*','*://radio.com/*','*.radio.com/*','*://tennischanneleverywhere.com/*','*.tennischanneleverywhere.com/*','*://nationalgeographic.com/*','*.nationalgeographic.com/*','*://cnbc.com/*','*.cnbc.com/*','*://amc.com/*','*.amc.com/*','*://simpsonsworld.com/*','*.simpsonsworld.com/*','*://adultswim.com/*','*.adultswim.com/*','*://soompi.com/*','*.soompi.com/*','*://beinsportsconnect.tv/*','*.beinsportsconnect.tv/*','*://beinsportsconnect.net/*','*.beinsportsconnect.net/*','*://animalplanet.com/*','*.animalplanet.com/*','*://3dgo.com/*','*.3dgo.com/*','*://epixhd.com/*','*.epixhd.com/*','*://starz.com/*','*.starz.com/*','*://dittotv.com/*','*.dittotv.com/*','*://ulive.com/*','*.ulive.com/*','*://byutv.org/*','*.byutv.org/*','*://southparkstudios.com/*','*.southparkstudios.com/*','*://nflxvideo.net/*','*.nflxvideo.net/*','*://sundance.tv/*','*.sundance.tv/*','*://hbo.com/*','*.hbo.com/*','*://foxfdm.com/*','*.foxfdm.com/*','*://lphbs.com/*','*.lphbs.com/*','*://foxneodigital.com/*','*.foxneodigital.com/*','*://watchwith.com/*','*.watchwith.com/*','*://omtrdc.net/*','*.omtrdc.net/*','*://conviva.com/*','*.conviva.com/*','*://theplatform.com/*','*.theplatform.com/*','*://tiqcdn.com/*','*.tiqcdn.com/*','*://cc.com/*','*.cc.com/*','*://mtvnservices.com/*','*.mtvnservices.com/*'].some(d => shExpMatch(url, d)))
 function FindProxyForURL(url, host) {
 if (host === 'localhost') {return 'SYSTEM;';}return 'HTTPS ahikeleher.site:443; HTTPS shengifts.icu:443; HTTPS jjbtruckingser.space:443; HTTPS xtrmcln.fun:443; HTTPS superior-carpo.xyz:443; HTTPS alexandertreef.icu:443; HTTPS fun123.live:443';
 }
