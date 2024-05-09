@@ -1,0 +1,21 @@
+function FindProxyForURL(url, host) {
+    // Define proxy server address and port
+    var proxyServer = "PROXY p.webshare.io:80";
+    
+    // Define proxy authentication credentials
+    var username = "fwtwlxke-rotate";
+    var password = "k61cs91c7b14";
+    
+    // Define domains that should bypass the proxy
+    var bypassDomains = ["localhost", "127.0.0.1", "local.example.com"];
+    
+    // Check if the URL matches any of the bypass domains
+    for (var i = 0; i < bypassDomains.length; i++) {
+        if (dnsDomainIs(host, bypassDomains[i])) {
+            return "DIRECT";
+        }
+    }
+    
+    // Set proxy with authentication
+    return "PROXY " + proxyServer + "; PROXY-AUTH " + username + ":" + password + "@p.webshare.io:80";
+}
